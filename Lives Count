@@ -1,0 +1,60 @@
+import pygame
+import sys
+
+# Initialize pygame
+pygame.init()
+
+# Screen settings
+screen_width, screen_height = 800, 600
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Click to Increase Lives")
+
+# Clock
+clock = pygame.time.Clock()
+
+# Lives
+lives = 1
+max_lives = 50
+end_lives = 15  # End game at 15
+
+# Font
+font = pygame.font.SysFont(None, 60)
+game_over_font = pygame.font.SysFont(None, 80)
+
+# Draw lives
+def draw_lives(surface, count):
+    text = font.render(f"Lives: {count}", True, (255, 255, 255))
+    surface.blit(text, (30, 30))
+
+# Game over screen
+def game_over():
+    text = game_over_font.render("GAME OVER", True, (255, 0, 0))
+    screen.fill((0, 0, 0))
+    screen.blit(text, (screen_width // 2 - 200, screen_height // 2 - 40))
+    pygame.display.update()
+    pygame.time.wait(3000)
+    pygame.quit()
+    sys.exit()
+
+# Main loop
+running = True
+while running:
+    screen.fill((0, 0, 0))  # Clear screen
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+        # Left click increases lives
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1 and lives < max_lives:
+                lives += 1
+                if lives == end_lives:
+                    game_over()
+
+    draw_lives(screen, lives)
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()
+sys.exit()
